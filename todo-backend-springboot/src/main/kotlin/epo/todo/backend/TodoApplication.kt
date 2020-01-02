@@ -1,11 +1,11 @@
-package epo.todo.todobackendspringboot
+package epo.todo.backend
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class TodoBackendSpringbootApplication
+class TodoApplication
 
 fun main(args: Array<String>) {
-	runApplication<TodoBackendSpringbootApplication>(*args)
+	runApplication<TodoApplication>(*args)
 }

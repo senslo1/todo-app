@@ -1,10 +1,10 @@
-package epo.todo.todobackendspringboot
+package epo.todo.backend
 
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 
 @SpringBootTest
-class TodoBackendSpringbootApplicationTests {
+class TodoApplicationTests {
 
 	@Test
 	fun contextLoads() {
