@@ -114,6 +114,17 @@ class TodoElementServiceTest {
     }
 
     @Test
+    fun `update invokes repository`() {
+        val todoElementDto = TodoElementDto(id = 1, text = "Gain 20 pounds", category = "Lifestyle")
+
+        `when`(repository.save(any(TodoElementEntity::class.java)))
+                .thenReturn(TodoElementEntity("Gain 20 pounds", "Lifestyle"))
+
+        todoElementService.update(1, todoElementDto)
+        verify(repository).save(any(TodoElementEntity::class.java))
+    }
+
+    @Test
     fun `update returns updated todo`() {
         val todoElementDto = TodoElementDto(id = 1, text = "Gain 20 pounds", category = "Lifestyle")
 
@@ -145,7 +156,7 @@ class TodoElementServiceTest {
     }
 
     @Test
-    fun delete() {
+    fun `delete invokes repository`() {
         doNothing().`when`(repository).deleteById(anyInt())
         todoElementService.delete(1)
         verify(repository).deleteById(1)
