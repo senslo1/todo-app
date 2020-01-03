@@ -1,7 +1,5 @@
 package epo.todo.backend.service
 
-import com.nhaarman.mockito_kotlin.doNothing
-import com.nhaarman.mockito_kotlin.verify
 import epo.todo.backend.domain.TodoElementEntity
 import epo.todo.backend.exception.BadRequestException
 import epo.todo.backend.model.TodoElementDto
@@ -15,6 +13,8 @@ import org.mockito.ArgumentMatchers.anyString
 import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito.`when`
+import org.mockito.Mockito.doNothing
+import org.mockito.Mockito.verify
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import kotlin.test.assertEquals

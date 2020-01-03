@@ -1,6 +1,5 @@
 package epo.todo.backend.controller
 
-import com.nhaarman.mockito_kotlin.doNothing
 import epo.todo.backend.model.TodoElementDto
 import epo.todo.backend.service.TodoElementService
 import org.junit.jupiter.api.Test
@@ -8,6 +7,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito.`when`
+import org.mockito.Mockito.doNothing
 import org.mockito.Mockito.verify
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.junit.jupiter.SpringExtension
