@@ -22,6 +22,9 @@
                 tableName="todo_element"
         />
         <rollback>
+            <dropUniqueConstraint tableName="todo_element"
+                                  constraintName="unique_text_and_category_combination"
+            />
             <dropTable tableName="todo_element"/>
         </rollback>
     </changeSet>
