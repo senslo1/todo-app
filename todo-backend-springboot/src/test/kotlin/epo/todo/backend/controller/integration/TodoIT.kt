@@ -166,6 +166,20 @@ class TodoIT {
     }
 
     @Test
+    fun `create two identical todos should return bad request`() {
+        val todoElementDto = dtoFixtures.simpleTodoElementDto()
+
+        createTodo(todoElementDto)
+                .andExpect(MockMvcResultMatchers.status().isOk)
+                .andExpect(jsonPath("$.text", `is`(todoElementDto.text)))
+                .andExpect(jsonPath("$.category", `is`(todoElementDto.category)))
+                .andExpect(jsonPath("$.id", `is`(1)))
+
+        createTodo(todoElementDto)
+                .andExpect(MockMvcResultMatchers.status().isBadRequest)
+    }
+
+    @Test
     fun `update todo should update todo`() {
         val todoElementDto = dtoFixtures.simpleTodoElementDto()
 
