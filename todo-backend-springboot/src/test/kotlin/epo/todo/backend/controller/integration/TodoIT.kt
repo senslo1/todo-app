@@ -180,6 +180,25 @@ class TodoIT {
     }
 
     @Test
+    fun `create two todos with identical texts but different categories should return 200`() {
+        val todoElementDto = dtoFixtures.simpleTodoElementDto()
+
+        createTodo(todoElementDto)
+                .andExpect(MockMvcResultMatchers.status().isOk)
+                .andExpect(jsonPath("$.text", `is`(todoElementDto.text)))
+                .andExpect(jsonPath("$.category", `is`(todoElementDto.category)))
+                .andExpect(jsonPath("$.id", `is`(1)))
+
+
+        val todoElementDtoWithDifferentCategory = todoElementDto.copy(category = "Some other category")
+        createTodo(todoElementDtoWithDifferentCategory)
+                .andExpect(MockMvcResultMatchers.status().isOk)
+                .andExpect(jsonPath("$.text", `is`(todoElementDtoWithDifferentCategory.text)))
+                .andExpect(jsonPath("$.category", `is`(todoElementDtoWithDifferentCategory.category)))
+                .andExpect(jsonPath("$.id", `is`(2)))
+    }
+
+    @Test
     fun `update todo should update todo`() {
         val todoElementDto = dtoFixtures.simpleTodoElementDto()
 
