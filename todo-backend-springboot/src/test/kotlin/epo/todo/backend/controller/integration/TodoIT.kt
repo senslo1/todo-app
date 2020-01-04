@@ -14,7 +14,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
 import org.springframework.test.annotation.DirtiesContext
-import org.springframework.test.annotation.Repeat
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.ResultActions
@@ -137,7 +136,6 @@ class TodoIT {
     }
 
     @Test
-    @Repeat
     fun `create two todos, both should exist in the database`() {
         val todoElementDtoList = dtoFixtures.simpleTodoElementDtoList()
 
@@ -165,6 +163,20 @@ class TodoIT {
                 .andExpect(jsonPath("$[1].text", `is`(todoElementDtoList[1].text)))
                 .andExpect(jsonPath("$[1].category", `is`(todoElementDtoList[1].category)))
                 .andExpect(jsonPath("$[1].id", `is`(2)))
+    }
+
+    @Test
+    fun `create two identical todos should return bad request`() {
+        val todoElementDto = dtoFixtures.simpleTodoElementDto()
+
+        createTodo(todoElementDto)
+                .andExpect(MockMvcResultMatchers.status().isOk)
+                .andExpect(jsonPath("$.text", `is`(todoElementDto.text)))
+                .andExpect(jsonPath("$.category", `is`(todoElementDto.category)))
+                .andExpect(jsonPath("$.id", `is`(1)))
+
+        createTodo(todoElementDto)
+                .andExpect(MockMvcResultMatchers.status().isBadRequest)
     }
 
     @Test

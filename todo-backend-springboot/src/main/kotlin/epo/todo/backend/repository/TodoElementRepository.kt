@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository
 @Repository
 interface TodoElementRepository : JpaRepository<TodoElementEntity, Int> {
     fun findAllByCategory(category: String): List<TodoElementEntity>
+    fun findByCategoryAndText(category: String, text: String): List<TodoElementEntity>
 }
