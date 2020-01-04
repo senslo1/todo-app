@@ -14,7 +14,7 @@ class TodoElementService(val todoElementRepository: TodoElementRepository) {
     fun create(todoElementDto: TodoElementDto): TodoElementDto {
         if (todoElementRepository.findByCategoryAndText(todoElementDto.category,
                                                         todoElementDto.text).isNotEmpty()) {
-            throw BadRequestException("Todo element with the same category and text already exists.")
+            throw BadRequestException("A todo element with the same category and text already exists.")
         }
         return upsert(todoElementDto)
     }
