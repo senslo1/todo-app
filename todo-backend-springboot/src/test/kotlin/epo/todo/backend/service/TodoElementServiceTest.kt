@@ -158,7 +158,10 @@ class TodoElementServiceTest {
     @Test
     fun `delete invokes repository`() {
         doNothing().`when`(repository).deleteById(anyInt())
+        `when`(repository.existsById(anyInt())).thenReturn(true)
+
         todoElementService.delete(1)
         verify(repository).deleteById(1)
+        verify(repository).existsById(1)
     }
 }

@@ -2,6 +2,7 @@ package epo.todo.backend.service
 
 import epo.todo.backend.domain.TodoElementEntity
 import epo.todo.backend.exception.BadRequestException
+import epo.todo.backend.exception.NotFoundException
 import epo.todo.backend.model.TodoElementDto
 import epo.todo.backend.repository.TodoElementRepository
 import org.springframework.stereotype.Service
@@ -45,6 +46,10 @@ class TodoElementService(val todoElementRepository: TodoElementRepository) {
     }
 
     fun delete(id: Int) {
-        todoElementRepository.deleteById(id)
+        if (todoElementRepository.existsById(id)) {
+            todoElementRepository.deleteById(id)
+        } else {
+            throw NotFoundException("Could not delete todo with id $id as it does not exist.")
+        }
     }
 }

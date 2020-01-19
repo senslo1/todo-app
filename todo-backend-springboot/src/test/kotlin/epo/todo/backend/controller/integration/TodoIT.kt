@@ -6,7 +6,6 @@ import epo.todo.backend.fixtures.TodoElementDtoFixtures
 import epo.todo.backend.model.TodoElementDto
 import org.hamcrest.Matchers.`is`
 import org.hamcrest.Matchers.lessThan
-import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
@@ -56,11 +55,6 @@ class TodoIT {
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(todoElementDto))
             )
-
-    private fun deleteTodo(id: Int) =
-            mvc.perform(MockMvcRequestBuilders.delete("/todo/{id}", id))
-                    .andExpect(MockMvcResultMatchers.status().isOk)
-
 
     private fun getTodos() = mvc.perform(
             MockMvcRequestBuilders
@@ -218,18 +212,17 @@ class TodoIT {
     }
 
     @Test
-    fun `delete nonexistent todo should throw exception`() {
-        // Will handle this case more gracefully in the future (i.e. not throw whatever exception Spring/JPA chooses)
-        Assertions.assertThrows(Exception::class.java) {
-            deleteTodo(1)
-        }
+    fun `delete nonexistent todo should return 404`() {
+        mvc.perform(MockMvcRequestBuilders.delete("/todo/{id}", 1))
+                .andExpect(MockMvcResultMatchers.status().isNotFound)
     }
 
     @Test
     fun `delete todo should return ok assert that todo is deleted`() {
         createTodo(dtoFixtures.simpleTodoElementDto())
         getTodos().andExpect(jsonPath("$.length()", `is`(1)))
-        deleteTodo(1)
+        mvc.perform(MockMvcRequestBuilders.delete("/todo/{id}", 1))
+                .andExpect(MockMvcResultMatchers.status().isOk)
         getTodos().andExpect(MockMvcResultMatchers.status().isNoContent)
     }
 }
