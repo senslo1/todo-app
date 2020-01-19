@@ -6,6 +6,10 @@ import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler
 
+/**
+ * Class that intercepts exceptions thrown by code called by REST controllers.
+ * Builds custom response bodies of type [ApiError] and adds an appropriate http code.
+ */
 @ControllerAdvice
 class RestExceptionHandler : ResponseEntityExceptionHandler() {
 
