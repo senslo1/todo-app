@@ -24,4 +24,10 @@ class RestExceptionHandler : ResponseEntityExceptionHandler() {
         val apiError = ApiError(HttpStatus.NOT_FOUND, ex.message!!)
         return ResponseEntity(apiError, apiError.status)
     }
+
+    @ExceptionHandler(value = [Exception::class])
+    fun handleException(ex: Exception): ResponseEntity<ApiError> {
+        val apiError = ApiError(HttpStatus.INTERNAL_SERVER_ERROR, ex.message!!)
+        return ResponseEntity(apiError, apiError.status)
+    }
 }
