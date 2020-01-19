@@ -1,5 +1,6 @@
 package epo.todo.backend.exception
 
+import com.fasterxml.jackson.annotation.JsonFormat
 import org.springframework.http.HttpStatus
 import java.time.Instant
 
@@ -10,5 +11,6 @@ data class ApiError(val status: HttpStatus,
                     val message: String = "Unexpected error",
                     var debugMessage: String? = null) {
 
-    private var timestamp = Instant.now()
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    private val timestamp: Instant = Instant.now()
 }
