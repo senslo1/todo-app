@@ -16,9 +16,10 @@ class TodoElementService(val todoElementRepository: TodoElementRepository) {
     private val log = KotlinLogging.logger {}
 
     fun create(todoElementDto: TodoElementDto): TodoElementDto {
-        if (todoElementRepository.findByCategoryAndText(todoElementDto.category,
-                                                        todoElementDto.text).isNotEmpty()) {
-            throw BadRequestException("A todo element with the same category and text already exists.")
+        if (todoElementRepository.existsByCategoryAndText(todoElementDto.category,
+                                                          todoElementDto.text)) {
+            throw BadRequestException("A todo element with category=${todoElementDto.category} " +
+                                              "and text=${todoElementDto.text} already exists.")
         }
         return upsert(todoElementDto)
                 .also { log.info { "Created todo element=$it" } }
@@ -52,10 +53,11 @@ class TodoElementService(val todoElementRepository: TodoElementRepository) {
     }
 
     fun delete(id: Int) {
-        if (todoElementRepository.existsById(id)) {
-            todoElementRepository.deleteById(id)
-        } else {
-            throw NotFoundException("Could not delete todo with id $id as it does not exist.")
+        if (!todoElementRepository.existsById(id)) {
+            throw NotFoundException("Could not delete todo with id=$id as it does not exist.")
         }
+
+        todoElementRepository.deleteById(id)
+                .also { log.info { "Deleted todo with id=$id" } }
     }
 }
