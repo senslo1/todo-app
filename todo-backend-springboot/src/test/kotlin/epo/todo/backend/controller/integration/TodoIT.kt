@@ -212,6 +212,31 @@ class TodoIT {
     }
 
     @Test
+    fun `update todo with identical todo should be idempotent`() {
+        val todoElementDto = dtoFixtures.simpleTodoElementDto()
+
+        createTodo(todoElementDto)
+                .andExpect(MockMvcResultMatchers.status().isOk)
+                .andExpect(jsonPath("$.text", `is`(todoElementDto.text)))
+                .andExpect(jsonPath("$.category", `is`(todoElementDto.category)))
+                .andExpect(jsonPath("$.id", `is`(1)))
+
+        val updateTodoElementDto = todoElementDto.copy(id = 1, text = "${todoElementDto.text} but more thoroughly")
+
+        updateTodo(updateTodoElementDto)
+                .andExpect(jsonPath("$.length()", `is`(3)))
+                .andExpect(jsonPath("$.text", `is`(updateTodoElementDto.text)))
+                .andExpect(jsonPath("$.category", `is`(updateTodoElementDto.category)))
+                .andExpect(jsonPath("$.id", `is`(1)))
+
+        updateTodo(updateTodoElementDto)
+                .andExpect(jsonPath("$.length()", `is`(3)))
+                .andExpect(jsonPath("$.text", `is`(updateTodoElementDto.text)))
+                .andExpect(jsonPath("$.category", `is`(updateTodoElementDto.category)))
+                .andExpect(jsonPath("$.id", `is`(1)))
+    }
+
+    @Test
     fun `delete nonexistent todo should return 404`() {
         mvc.perform(MockMvcRequestBuilders.delete("/todo/{id}", 1))
                 .andExpect(MockMvcResultMatchers.status().isNotFound)
