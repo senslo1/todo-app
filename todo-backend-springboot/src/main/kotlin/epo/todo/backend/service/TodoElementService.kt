@@ -45,6 +45,7 @@ class TodoElementService(val todoElementRepository: TodoElementRepository) {
                     else -> todoElementRepository.findAllByCategory(category)
                 }
         return todoElements.map { TodoElementDto(it) }
+                .also { log.info { "get by category=$category returned todos=$it" } }
     }
 
     private fun upsert(todoElementDto: TodoElementDto): TodoElementDto {
