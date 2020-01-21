@@ -1,7 +1,7 @@
 package epo.todo.backend.service
 
 import epo.todo.backend.domain.TodoElementEntity
-import epo.todo.backend.exception.BadRequestException
+import epo.todo.backend.error.exception.BadRequestException
 import epo.todo.backend.model.TodoElementDto
 import epo.todo.backend.repository.TodoElementRepository
 import org.junit.jupiter.api.Assertions

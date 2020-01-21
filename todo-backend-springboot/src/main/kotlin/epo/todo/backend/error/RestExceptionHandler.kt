@@ -1,5 +1,7 @@
-package epo.todo.backend.exception
+package epo.todo.backend.error
 
+import epo.todo.backend.error.exception.BadRequestException
+import epo.todo.backend.error.exception.NotFoundException
 import mu.KotlinLogging
 import org.slf4j.MDC
 import org.springframework.http.HttpStatus
@@ -22,7 +24,8 @@ class RestExceptionHandler : ResponseEntityExceptionHandler() {
      * Extension function joining all stack trace elements to a single string
      * for simple stack trace logging.
      */
-    fun java.lang.Exception.prettyStackTrace(): String = this.stackTrace.asList().joinToString(separator = "\nat ")
+    fun java.lang.Exception.prettyStackTrace(): String =
+            this.stackTrace.asList().joinToString(separator = "\nat ")
 
     private fun logException(ex: Exception) {
         log.error { ex.message }

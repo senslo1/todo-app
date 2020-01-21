@@ -1,4 +1,4 @@
-package epo.todo.backend.exception
+package epo.todo.backend.error
 
 import com.fasterxml.jackson.annotation.JsonFormat
 import org.springframework.http.HttpStatus
