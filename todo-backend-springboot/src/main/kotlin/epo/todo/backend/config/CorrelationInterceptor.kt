@@ -36,8 +36,8 @@ class CorrelationInterceptor : HandlerInterceptorAdapter() {
             // It's a bit counter intuitive to call fromString and then toString, but by calling UUID.fromString(),
             // the string gets automatically validated. Any string that is not in a valid UUID format will
             // cause an IllegalArgumentException to be thrown, which allows us to assign a new one instead.
-            UUID.fromString(request.getHeader(CORRELATION_ID_HEADER_NAME)).toString()
-        } catch (e: Exception) {
+            UUID.fromString(request.getHeader(CORRELATION_ID_HEADER_NAME) ?: "").toString()
+        } catch (e: IllegalArgumentException) {
             UUID.randomUUID().toString()
         }
     }
