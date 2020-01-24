@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.2.2.RELEASE</version>
+        <version>2.2.4.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>epo.todo</groupId>
@@ -20,13 +20,16 @@
         <junit5.version>5.5.1</junit5.version>
         <jackson.version>2.9.8</jackson.version>
         <logback-classic.version>1.2.3</logback-classic.version>
+        <h2.version>1.4.200</h2.version>
+        <kotlin-logging.version>1.7.7</kotlin-logging.version>
+        <liquibase-core.version>3.8.2</liquibase-core.version>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>io.github.microutils</groupId>
             <artifactId>kotlin-logging</artifactId>
-            <version>1.7.7</version>
+            <version>${kotlin-logging.version}</version>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
@@ -36,6 +39,7 @@
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
+            <version>${h2.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -56,6 +60,7 @@
         <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
+            <version>${liquibase-core.version}</version>
         </dependency>
 
         <!--Test dependencies-->
