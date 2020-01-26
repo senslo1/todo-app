@@ -1,13 +1,19 @@
 package epo.todo.backend.error
 
+import com.atlassian.oai.validator.springmvc.InvalidRequestException
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
 import epo.todo.backend.error.exception.BadRequestException
 import epo.todo.backend.error.exception.NotFoundException
+import epo.todo.backend.error.model.ApiError
+import epo.todo.backend.error.model.SwaggerValidationMessageList
 import mu.KotlinLogging
 import org.slf4j.MDC
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
+import org.springframework.web.context.request.WebRequest
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler
 import java.util.UUID
 
@@ -32,9 +38,12 @@ class RestExceptionHandler : ResponseEntityExceptionHandler() {
         log.error { ex.prettyStackTrace() }
     }
 
-    private fun buildResponse(status: HttpStatus, message: String?): ResponseEntity<ApiError> {
-        val apiError = ApiError(status = status,
+    private fun buildResponse(status: HttpStatus,
+                              message: String?,
+                              debugMessage: SwaggerValidationMessageList? = null): ResponseEntity<ApiError> {
+        val apiError = ApiError(status = "${status.value()} ${status.reasonPhrase}",
                                 message = message ?: UNEXPECTED_ERROR,
+                                debugMessage = debugMessage,
                                 correlationId = UUID.fromString(MDC.get(CORRELATION_ID_LOG_VAR_NAME)))
         return ResponseEntity(apiError, status)
     }
@@ -48,6 +57,15 @@ class RestExceptionHandler : ResponseEntityExceptionHandler() {
     @ExceptionHandler(value = [NotFoundException::class])
     fun handleException(ex: NotFoundException): ResponseEntity<ApiError> {
         return buildResponse(HttpStatus.NOT_FOUND, ex.message)
+                .also { logException(ex) }
+    }
+
+    @ExceptionHandler(value = [InvalidRequestException::class])
+    fun handleException(ex: InvalidRequestException, req: WebRequest): ResponseEntity<ApiError> {
+        val debugMessage = jacksonObjectMapper().readValue<SwaggerValidationMessageList>(ex.message!!)
+        val message = "The request did not follow the constraints given by the OpenApi specification. " +
+                "Check the debug message for more details."
+        return buildResponse(HttpStatus.BAD_REQUEST, message, debugMessage)
                 .also { logException(ex) }
     }
 
