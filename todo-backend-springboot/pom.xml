@@ -17,12 +17,13 @@
     <properties>
         <java.version>1.8</java.version>
         <kotlin.version>1.3.61</kotlin.version>
-        <junit5.version>5.5.1</junit5.version>
+        <junit5.version>5.5.2</junit5.version>
         <jackson.version>2.9.8</jackson.version>
         <logback-classic.version>1.2.3</logback-classic.version>
         <h2.version>1.4.200</h2.version>
         <kotlin-logging.version>1.7.7</kotlin-logging.version>
         <liquibase-core.version>3.8.2</liquibase-core.version>
+        <swagger-request-validator.version>2.8.3</swagger-request-validator.version>
     </properties>
 
     <dependencies>
@@ -62,6 +63,22 @@
             <artifactId>liquibase-core</artifactId>
             <version>${liquibase-core.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.atlassian.oai</groupId>
+            <artifactId>swagger-request-validator-core</artifactId>
+            <version>${swagger-request-validator.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.atlassian.oai</groupId>
+            <artifactId>swagger-request-validator-springmvc</artifactId>
+            <version>${swagger-request-validator.version}</version>
+        </dependency>
+        <!--        For some reason atlassian don't have this dependency inside swagger request validator...-->
+        <dependency>
+            <groupId>com.fasterxml.jackson.module</groupId>
+            <artifactId>jackson-module-jaxb-annotations</artifactId>
+            <version>2.10.1</version>
+        </dependency>
 
         <!--Test dependencies-->
         <dependency>
@@ -100,9 +117,29 @@
         </dependency>
     </dependencies>
 
+    <!--    Need to resolve some version conflicts in transitive dependencies-->
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.google.code.findbugs</groupId>
+                <artifactId>jsr305</artifactId>
+                <version>3.0.2</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>28.1-jre</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.java-json-tools</groupId>
+                <artifactId>json-schema-validator</artifactId>
+                <version>2.2.11</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <build>
         <sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
-        <testSourceDirectory>${project.basedir}/src/test/kotlin</testSourceDirectory>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -119,6 +156,7 @@
                         <plugin>spring</plugin>
                         <plugin>jpa</plugin>
                     </compilerPlugins>
+                    <jvmTarget>1.8</jvmTarget>
                 </configuration>
                 <dependencies>
                     <dependency>
@@ -136,6 +174,17 @@
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.22.0</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>3.0.0-M3</version>
+                <configuration>
+                    <rules>
+                        <dependencyConvergence/>
+                    </rules>
+                </configuration>
             </plugin>
         </plugins>
     </build>
