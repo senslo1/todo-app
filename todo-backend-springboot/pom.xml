@@ -73,11 +73,10 @@
             <artifactId>swagger-request-validator-springmvc</artifactId>
             <version>${swagger-request-validator.version}</version>
         </dependency>
-        <!--        For some reason atlassian don't have this dependency inside swagger request validator...-->
+        <!--        For some reason this is not a transitive dependency inside swagger request validator...-->
         <dependency>
             <groupId>com.fasterxml.jackson.module</groupId>
             <artifactId>jackson-module-jaxb-annotations</artifactId>
-            <version>2.10.1</version>
         </dependency>
 
         <!--Test dependencies-->
