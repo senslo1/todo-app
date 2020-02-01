@@ -7,6 +7,10 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
+/**
+ * Configuration class serving an [OpenApiValidationInterceptor] bean.
+ * This interceptor is registered in the [WebMvcConfig].
+ */
 @Configuration
 class OpenApiValidationConfig(@Value("\${swagger.specification.document-path}") val openApiSpec: String) {
 
@@ -20,7 +24,9 @@ class OpenApiValidationConfig(@Value("\${swagger.specification.document-path}") 
 
     @Bean
     fun openApiValidationInterceptor(): OpenApiValidationInterceptor {
-        val openApiInteractionValidator = OpenApiInteractionValidator.createFor(openApiSpec).build()
+        val openApiInteractionValidator = OpenApiInteractionValidator
+                .createForSpecificationUrl(openApiSpec)
+                .build()
         return OpenApiValidationInterceptor(openApiInteractionValidator)
     }
 }
