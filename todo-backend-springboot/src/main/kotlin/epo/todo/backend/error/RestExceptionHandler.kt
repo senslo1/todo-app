@@ -6,7 +6,6 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import epo.todo.backend.error.exception.BadRequestException
 import epo.todo.backend.error.exception.NotFoundException
 import epo.todo.backend.error.model.ApiError
-import epo.todo.backend.error.model.SwaggerValidationMessageList
 import mu.KotlinLogging
 import org.slf4j.MDC
 import org.springframework.http.HttpStatus
@@ -40,7 +39,7 @@ class RestExceptionHandler : ResponseEntityExceptionHandler() {
 
     private fun buildResponse(status: HttpStatus,
                               message: String?,
-                              debugMessage: SwaggerValidationMessageList? = null): ResponseEntity<ApiError> {
+                              debugMessage: Any? = null): ResponseEntity<ApiError> {
         val apiError = ApiError(status = "${status.value()} ${status.reasonPhrase}",
                                 message = message ?: UNEXPECTED_ERROR,
                                 debugMessage = debugMessage,
@@ -62,7 +61,7 @@ class RestExceptionHandler : ResponseEntityExceptionHandler() {
 
     @ExceptionHandler(value = [InvalidRequestException::class])
     fun handleException(ex: InvalidRequestException, req: WebRequest): ResponseEntity<ApiError> {
-        val debugMessage = jacksonObjectMapper().readValue<SwaggerValidationMessageList>(ex.message!!)
+        val debugMessage = jacksonObjectMapper().readValue<Any>(ex.message!!)
         val message = "The request did not follow the constraints given by the OpenApi specification. " +
                 "Check the debug message for more details."
         return buildResponse(HttpStatus.BAD_REQUEST, message, debugMessage)

@@ -11,7 +11,7 @@ import java.util.UUID
 @JsonInclude(JsonInclude.Include.NON_NULL)
 data class ApiError(val status: String,
                     val message: String,
-                    val debugMessage: SwaggerValidationMessageList?,
+                    val debugMessage: Any?, // The format of the debug message may vary.
                     val correlationId: UUID) {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING)

@@ -66,7 +66,9 @@ paths:
           in: query
           schema:
             type: string
+            nullable: false
             example: "House chores"
+          required: false
       responses:
         200:
           description: OK. Returns the list of existing todos
@@ -189,6 +191,10 @@ components:
           type: string
           example: "Could not delete todo with id=1 as it does not exist."
           description: A user friendly error message.
+          nullable: false
+        debugMessage:
+          type: object
+          description: A detailed error message where applicable. Format may vary.
           nullable: false
         timestamp:
           type: string
