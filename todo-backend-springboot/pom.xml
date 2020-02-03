@@ -58,11 +58,6 @@
         </dependency>
         <dependency>
             <groupId>com.atlassian.oai</groupId>
-            <artifactId>swagger-request-validator-core</artifactId>
-            <version>${swagger-request-validator.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.atlassian.oai</groupId>
             <artifactId>swagger-request-validator-springmvc</artifactId>
             <version>${swagger-request-validator.version}</version>
         </dependency>
