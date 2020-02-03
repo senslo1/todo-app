@@ -17,5 +17,4 @@ swagger:
     document-path: @project.basedir@/src/main/resources/swagger.yml
 
 server:
-  servlet.context-path: /api
   port: 5000
