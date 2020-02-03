@@ -11,6 +11,22 @@ tags:
   - name: Todo
     description: Everything about your todos
 paths:
+  /:
+    get:
+      tags:
+        - Documentation
+      responses:
+        200:
+          description: OK. Returns this document.
+      summary: API Documentation endpoint.
+  /api-doc:
+    get:
+      tags:
+        - Documentation
+      responses:
+        200:
+          description: OK. Returns this document.
+      summary: API Documentation endpoint.
   /todo:
     post:
       tags:
