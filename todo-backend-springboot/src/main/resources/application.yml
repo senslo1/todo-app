@@ -12,7 +12,9 @@ spring:
       hibernate.enable_lazy_load_no_trans: true
   liquibase:
     change-log: classpath:/db/changelog/changelog-master.xml
+swagger:
+  specification:
+    document-path: @project.basedir@/src/main/resources/swagger.yml
 
 server:
-  servlet.context-path: /api
   port: 5000

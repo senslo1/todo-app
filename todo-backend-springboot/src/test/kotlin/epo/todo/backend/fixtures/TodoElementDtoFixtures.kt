@@ -28,4 +28,12 @@ class TodoElementDtoFixtures {
                 TodoElementDto(text = "Get my first sponsor", category = "Skateboarding")
         )
     }
+
+    @Bean
+    fun malformedTodoAsJsonString(): String {
+        return """{
+            "teeeeeeeeext": "Break into Shadow Moses",
+	        "caaaaategory": "Tactical espionage action"
+            }"""
+    }
 }

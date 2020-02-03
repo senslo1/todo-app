@@ -3,20 +3,17 @@ package epo.todo.backend.controller
 import epo.todo.backend.model.TodoElementDto
 import epo.todo.backend.service.TodoElementService
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.doNothing
 import org.mockito.Mockito.verify
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.test.context.junit.jupiter.SpringExtension
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
 @SpringBootTest
-@ExtendWith(SpringExtension::class)
 class TodoElementControllerTest {
 
     @InjectMocks

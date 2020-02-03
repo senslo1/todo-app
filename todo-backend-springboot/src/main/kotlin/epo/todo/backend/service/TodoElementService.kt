@@ -40,8 +40,8 @@ class TodoElementService(val todoElementRepository: TodoElementRepository) {
     fun get(category: String?): List<TodoElementDto> {
         log.info { "Getting todos with category=$category" }
         val todoElements: List<TodoElementEntity> =
-                when {
-                    category == null -> todoElementRepository.findAll()
+                when (category) {
+                    null -> todoElementRepository.findAll()
                     else -> todoElementRepository.findAllByCategory(category)
                 }
         return todoElements.map { TodoElementDto(it) }
