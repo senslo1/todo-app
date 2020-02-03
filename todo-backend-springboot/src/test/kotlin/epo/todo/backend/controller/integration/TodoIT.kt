@@ -7,13 +7,11 @@ import epo.todo.backend.model.TodoElementDto
 import org.hamcrest.Matchers.`is`
 import org.hamcrest.Matchers.lessThan
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
 import org.springframework.test.annotation.DirtiesContext
-import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.ResultActions
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
@@ -21,7 +19,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 
 @AutoConfigureMockMvc
-@ExtendWith(SpringExtension::class)
 @SpringBootTest(classes = [TodoApplication::class])
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class TodoIT {
@@ -35,7 +32,7 @@ class TodoIT {
     val objectMapper = jacksonObjectMapper()
 
     private fun createTodo(todoElementDto: TodoElementDto): ResultActions = mvc.perform(
-            MockMvcRequestBuilders.post("/todo")
+            MockMvcRequestBuilders.post(TODO_PATH)
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(todoElementDto))
     )
@@ -51,21 +48,21 @@ class TodoIT {
 
     private fun updateTodo(todoElementDto: TodoElementDto): ResultActions =
             mvc.perform(
-                    MockMvcRequestBuilders.put("/todo/${todoElementDto.id}")
+                    MockMvcRequestBuilders.put("${TODO_PATH}/{id}", todoElementDto.id)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(todoElementDto))
             )
 
     private fun getTodos() = mvc.perform(
             MockMvcRequestBuilders
-                    .get("/todo")
+                    .get(TODO_PATH)
                     .accept(MediaType.APPLICATION_JSON)
     )
 
     private fun getTodosWithCategory(category: String): ResultActions {
         return mvc.perform(
                 MockMvcRequestBuilders
-                        .get("/todo")
+                        .get(TODO_PATH)
                         .accept(MediaType.APPLICATION_JSON)
                         .queryParam("category", category)
         )
@@ -98,6 +95,28 @@ class TodoIT {
     }
 
     @Test
+    fun `get by category null should return bad request`() {
+        mvc.perform(
+                MockMvcRequestBuilders
+                        .get("${TODO_PATH}?category=null")
+                        .accept(MediaType.APPLICATION_JSON)
+        )
+                .andExpect(MockMvcResultMatchers.status().isBadRequest)
+    }
+
+    @Test
+    fun `post with malformed body should return bad request`() {
+        val malformedTodo = dtoFixtures.malformedTodoAsJsonString()
+        mvc.perform(
+                MockMvcRequestBuilders.post(TODO_PATH)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(malformedTodo)
+        )
+                .andExpect(MockMvcResultMatchers.status().isBadRequest)
+    }
+
+    @Test
     fun `get by category should return empty list when no todos match`() {
         val todoElementDtoList = dtoFixtures.todoElementDtoListWithTwoCategories()
 
@@ -105,7 +124,7 @@ class TodoIT {
 
         mvc.perform(
                 MockMvcRequestBuilders
-                        .get("/todo")
+                        .get(TODO_PATH)
                         .accept(MediaType.APPLICATION_JSON)
                         .queryParam("category", "Physical exercise")
         )
@@ -268,8 +287,12 @@ class TodoIT {
     fun `delete todo should return ok assert that todo is deleted`() {
         createTodo(dtoFixtures.simpleTodoElementDto())
         getTodos().andExpect(jsonPath("$.length()", `is`(1)))
-        mvc.perform(MockMvcRequestBuilders.delete("/todo/{id}", 1))
+        mvc.perform(MockMvcRequestBuilders.delete("${TODO_PATH}/{id}", 1))
                 .andExpect(MockMvcResultMatchers.status().isOk)
         getTodos().andExpect(MockMvcResultMatchers.status().isNoContent)
+    }
+
+    companion object {
+        private const val TODO_PATH = "/api/todo"
     }
 }
