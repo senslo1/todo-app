@@ -32,7 +32,7 @@ class TodoElementController(val todoElementService: TodoElementService) {
     }
 
     @GetMapping(path = ["/todo"])
-    fun get(@RequestParam category: String?): ResponseEntity<List<TodoElementDto>> {
+    fun get(@RequestParam(required = false) category: String?): ResponseEntity<List<TodoElementDto>> {
         val todos = todoElementService.get(category)
         return when {
             todos.isEmpty() -> ResponseEntity.noContent().build()
