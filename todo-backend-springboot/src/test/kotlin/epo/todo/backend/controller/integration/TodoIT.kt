@@ -6,6 +6,7 @@ import epo.todo.backend.fixtures.TodoElementDtoFixtures
 import epo.todo.backend.model.TodoElementDto
 import org.hamcrest.Matchers.`is`
 import org.hamcrest.Matchers.lessThan
+import org.hamcrest.Matchers.notNullValue
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
@@ -279,8 +280,9 @@ class TodoIT {
 
     @Test
     fun `delete nonexistent todo should return 404`() {
-        mvc.perform(MockMvcRequestBuilders.delete("/todo/{id}", 1))
+        mvc.perform(MockMvcRequestBuilders.delete("${TODO_PATH}/{id}", 1))
                 .andExpect(MockMvcResultMatchers.status().isNotFound)
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message", `is`(notNullValue())))
     }
 
     @Test
