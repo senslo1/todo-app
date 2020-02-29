@@ -282,7 +282,7 @@ class TodoIT {
     fun `delete nonexistent todo should return 404`() {
         mvc.perform(MockMvcRequestBuilders.delete("${TODO_PATH}/{id}", 1))
                 .andExpect(MockMvcResultMatchers.status().isNotFound)
-                .andExpect(MockMvcResultMatchers.jsonPath("$.message", `is`(notNullValue())))
+                .andExpect(jsonPath("$.message", `is`(notNullValue())))
     }
 
     @Test
