@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse
  * Implementation of [HandlerInterceptorAdapter] that attaches a correlation ID to SLF4J's MDC
  * (Mapped Diagnostic Context) when a REST endpoint is called. If one is provided as a header
  * then it will be used; otherwise, a new one will be created.
- * When the controller returns a response, the correlation ID will be removed from the MDC.
+ * Before the response is returned, the correlation ID will be added as a response header and removed from the MDC.
  */
 @Component
 class CorrelationInterceptor : HandlerInterceptorAdapter() {
@@ -19,7 +19,7 @@ class CorrelationInterceptor : HandlerInterceptorAdapter() {
     override fun preHandle(request: HttpServletRequest,
                            response: HttpServletResponse,
                            handler: Any): Boolean {
-        val correlationId = getCorrelationIdFromHeader(request)
+        val correlationId = getCorrelationIdFromHeaderOrCreateNew(request)
         MDC.put(CORRELATION_ID_LOG_VAR_NAME, correlationId)
         return true
     }
@@ -28,10 +28,11 @@ class CorrelationInterceptor : HandlerInterceptorAdapter() {
                                  response: HttpServletResponse,
                                  handler: Any,
                                  ex: Exception?) {
+        response.addHeader(CORRELATION_ID_HEADER_NAME, MDC.get(CORRELATION_ID_LOG_VAR_NAME))
         MDC.remove(CORRELATION_ID_LOG_VAR_NAME)
     }
 
-    private fun getCorrelationIdFromHeader(request: HttpServletRequest): String {
+    private fun getCorrelationIdFromHeaderOrCreateNew(request: HttpServletRequest): String {
         return try {
             // It's a bit counter intuitive to call fromString and then toString, but by calling UUID.fromString(),
             // the string gets automatically validated. Any string that is not in a valid UUID format will

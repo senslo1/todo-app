@@ -2,21 +2,28 @@ package epo.todo.backend.controller
 
 import epo.todo.backend.model.TodoElementDto
 import epo.todo.backend.service.TodoElementService
+import org.hamcrest.Matchers.notNullValue
+import org.hamcrest.core.Is.`is`
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.doNothing
 import org.mockito.Mockito.verify
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.test.context.junit.jupiter.SpringExtension
+import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.header
+import java.util.UUID
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
 @SpringBootTest
-@ExtendWith(SpringExtension::class)
+@AutoConfigureMockMvc
 class TodoElementControllerTest {
 
     @InjectMocks
@@ -24,6 +31,38 @@ class TodoElementControllerTest {
 
     @Mock
     lateinit var todoElementService: TodoElementService
+
+    @Autowired
+    lateinit var mockMvc: MockMvc
+
+    @Test
+    fun `correlationId from GET request should be returned in response header`() {
+        val correlationId = UUID.randomUUID().toString()
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.get(TODO_PATH)
+                        .header(CORRELATION_ID_HEADER_NAME, correlationId)
+        )
+                .andExpect(header().string(CORRELATION_ID_HEADER_NAME, correlationId))
+    }
+
+    @Test
+    fun `generated correlationId should be returned in response header when not provided in request`() {
+        mockMvc.perform(MockMvcRequestBuilders.get(TODO_PATH))
+                .andExpect(header().string(CORRELATION_ID_HEADER_NAME, `is`(notNullValue())))
+    }
+
+    @Test
+    fun `correlationId from DELETE request should be returned in error response header`() {
+        val correlationId = UUID.randomUUID().toString()
+        mockMvc.perform(
+                MockMvcRequestBuilders.delete("${TODO_PATH}/{id}", 1)
+                        .header(CORRELATION_ID_HEADER_NAME, correlationId)
+        )
+                .andExpect(MockMvcResultMatchers.status().isNotFound)
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").isNotEmpty)
+                .andExpect(header().string(CORRELATION_ID_HEADER_NAME, correlationId))
+    }
 
     @Test
     fun `get with category filter should return todo`() {
@@ -90,5 +129,10 @@ class TodoElementControllerTest {
         doNothing().`when`(todoElementService).delete(1)
         todoElementController.delete(1)
         verify(todoElementService).delete(1)
+    }
+
+    companion object {
+        private const val TODO_PATH = "/api/todo"
+        private const val CORRELATION_ID_HEADER_NAME = "X-Correlation-Id"
     }
 }
