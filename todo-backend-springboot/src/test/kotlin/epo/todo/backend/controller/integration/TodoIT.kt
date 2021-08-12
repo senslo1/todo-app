@@ -260,22 +260,13 @@ class TodoIT {
     }
 
     @Test
-    fun `create todo with PUT then with POST should result in the POSTed todo getting id 2`() {
+    fun `update nonexistent todo should return 404`() {
         val todoElementDto = dtoFixtures.simpleTodoElementDto()
         val updateTodoElementDto = todoElementDto.copy(id = 1, text = "Some other activity")
 
         updateTodo(updateTodoElementDto)
-                .andExpect(MockMvcResultMatchers.status().isOk)
-                .andExpect(jsonPath("$.length()", `is`(3)))
-                .andExpect(jsonPath("$.text", `is`(updateTodoElementDto.text)))
-                .andExpect(jsonPath("$.category", `is`(updateTodoElementDto.category)))
-                .andExpect(jsonPath("$.id", `is`(1)))
-
-        createTodo(todoElementDto)
-                .andExpect(MockMvcResultMatchers.status().isOk)
-                .andExpect(jsonPath("$.text", `is`(todoElementDto.text)))
-                .andExpect(jsonPath("$.category", `is`(todoElementDto.category)))
-                .andExpect(jsonPath("$.id", `is`(2)))
+                .andExpect(MockMvcResultMatchers.status().isNotFound)
+                .andExpect(jsonPath("$.message", `is`(notNullValue())))
     }
 
     @Test

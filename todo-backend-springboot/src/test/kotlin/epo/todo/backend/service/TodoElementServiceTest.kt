@@ -117,6 +117,7 @@ class TodoElementServiceTest {
     fun `update invokes repository`() {
         val todoElementDto = TodoElementDto(id = 1, text = "Gain 20 pounds", category = "Lifestyle")
 
+        `when`(repository.existsById(anyInt())).thenReturn(true)
         `when`(repository.save(any(TodoElementEntity::class.java)))
                 .thenReturn(TodoElementEntity("Gain 20 pounds", "Lifestyle"))
 
@@ -128,6 +129,7 @@ class TodoElementServiceTest {
     fun `update returns updated todo`() {
         val todoElementDto = TodoElementDto(id = 1, text = "Gain 20 pounds", category = "Lifestyle")
 
+        `when`(repository.existsById(anyInt())).thenReturn(true)
         `when`(repository.save(any(TodoElementEntity::class.java)))
                 .thenReturn(TodoElementEntity("Gain 20 pounds", "Lifestyle"))
 

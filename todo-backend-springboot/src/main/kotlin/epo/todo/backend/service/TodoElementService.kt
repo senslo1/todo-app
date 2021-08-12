@@ -32,6 +32,9 @@ class TodoElementService(val todoElementRepository: TodoElementRepository) {
         if (todoElementDto.id != id) {
             throw BadRequestException("Id of todo element must match the id of the path.")
         }
+        if (!todoElementRepository.existsById(id)) {
+            throw NotFoundException("Could not update todo with id=$id as it does not exist.")
+        }
 
         return upsert(todoElementDto)
                 .also { log.info { "Updated todo element=$todoElementDto" } }
