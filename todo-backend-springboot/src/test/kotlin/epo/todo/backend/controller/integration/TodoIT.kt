@@ -75,6 +75,18 @@ class TodoIT {
     }
 
     @Test
+    fun `get todos with invalid origin should return 403`() {
+        mvc.perform(
+            MockMvcRequestBuilders
+                    .get(TODO_PATH)
+                    .header("Origin", "https://disallowed-domain.com")
+                    .accept(MediaType.APPLICATION_JSON)
+        )
+                .andExpect(MockMvcResultMatchers.status().isForbidden)
+                .andExpect(MockMvcResultMatchers.content().string("Invalid CORS request"))
+    }
+
+    @Test
     fun `get should return all todos`() {
         val todoElementDtoList = dtoFixtures.todoElementDtoListWithTwoCategories()
 
