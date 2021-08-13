@@ -1,13 +1,15 @@
 import React from 'react';
 import './App.css';
 import TodoList from "./components/TodoList";
+import CreateTodo from "./components/CreateTodo";
 
-function App() {
+const App = () => {
     return (
         <div className="App">
-            <TodoList/>
+            <CreateTodo />
+            <TodoList />
         </div>
     );
-}
+};
 
 export default App;
