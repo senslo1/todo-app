@@ -33,39 +33,39 @@ class TodoIT {
     val objectMapper = jacksonObjectMapper()
 
     private fun createTodo(todoElementDto: TodoElementDto): ResultActions = mvc.perform(
-            MockMvcRequestBuilders.post(TODO_PATH)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsString(todoElementDto))
+        MockMvcRequestBuilders.post(TODO_PATH)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(todoElementDto))
     )
 
     private fun createMultipleTodos(todoElementDtoList: List<TodoElementDto>) =
-            todoElementDtoList.forEachIndexed { index, todo ->
-                createTodo(todo)
-                        .andExpect(MockMvcResultMatchers.status().isOk)
-                        .andExpect(jsonPath("$.text", `is`(todo.text)))
-                        .andExpect(jsonPath("$.category", `is`(todo.category)))
-                        .andExpect(jsonPath("$.id", `is`(index + 1)))
-            }
+        todoElementDtoList.forEachIndexed { index, todo ->
+            createTodo(todo)
+                    .andExpect(MockMvcResultMatchers.status().isOk)
+                    .andExpect(jsonPath("$.text", `is`(todo.text)))
+                    .andExpect(jsonPath("$.category", `is`(todo.category)))
+                    .andExpect(jsonPath("$.id", `is`(index + 1)))
+        }
 
     private fun updateTodo(todoElementDto: TodoElementDto): ResultActions =
-            mvc.perform(
-                    MockMvcRequestBuilders.put("${TODO_PATH}/{id}", todoElementDto.id)
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(todoElementDto))
-            )
+        mvc.perform(
+            MockMvcRequestBuilders.put("${TODO_PATH}/{id}", todoElementDto.id)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(todoElementDto))
+        )
 
     private fun getTodos() = mvc.perform(
-            MockMvcRequestBuilders
-                    .get(TODO_PATH)
-                    .accept(MediaType.APPLICATION_JSON)
+        MockMvcRequestBuilders
+                .get(TODO_PATH)
+                .accept(MediaType.APPLICATION_JSON)
     )
 
     private fun getTodosWithCategory(category: String): ResultActions {
         return mvc.perform(
-                MockMvcRequestBuilders
-                        .get(TODO_PATH)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .queryParam("category", category)
+            MockMvcRequestBuilders
+                    .get(TODO_PATH)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .queryParam("category", category)
         )
     }
 
@@ -110,9 +110,9 @@ class TodoIT {
     @Test
     fun `get by category null should return bad request`() {
         mvc.perform(
-                MockMvcRequestBuilders
-                        .get("${TODO_PATH}?category=null")
-                        .accept(MediaType.APPLICATION_JSON)
+            MockMvcRequestBuilders
+                    .get("${TODO_PATH}?category=null")
+                    .accept(MediaType.APPLICATION_JSON)
         )
                 .andExpect(MockMvcResultMatchers.status().isBadRequest)
     }
@@ -121,10 +121,10 @@ class TodoIT {
     fun `post with malformed body should return bad request`() {
         val malformedTodo = dtoFixtures.malformedTodoAsJsonString()
         mvc.perform(
-                MockMvcRequestBuilders.post(TODO_PATH)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .content(malformedTodo)
+            MockMvcRequestBuilders.post(TODO_PATH)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .content(malformedTodo)
         )
                 .andExpect(MockMvcResultMatchers.status().isBadRequest)
     }
@@ -136,10 +136,10 @@ class TodoIT {
         createMultipleTodos(todoElementDtoList)
 
         mvc.perform(
-                MockMvcRequestBuilders
-                        .get(TODO_PATH)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .queryParam("category", "Physical exercise")
+            MockMvcRequestBuilders
+                    .get(TODO_PATH)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .queryParam("category", "Physical exercise")
         )
                 .andExpect(MockMvcResultMatchers.status().isNoContent)
     }
