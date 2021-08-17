@@ -8,8 +8,8 @@ interface IProps extends ITodo {
 const Todo = (props: IProps) => {
     return (
         <div>
-            <h2>{ props.text }</h2>
-            <p>{ props.category }</p>
+            <h2>{props.text}</h2>
+            <p>{props.category}</p>
         </div>
     );
 }
