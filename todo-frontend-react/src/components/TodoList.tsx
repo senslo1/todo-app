@@ -1,23 +1,20 @@
-import React, { useEffect, useState } from 'react';
-import getAllTodos from "../httpClient";
-import { ITodo } from "../interfaces";
+import React, { useEffect } from 'react';
 import Todo from "./Todo";
+import { useDispatch, useSelector } from "react-redux";
+import { Store } from "../state";
+import { initialFetch } from "../state/action-creators";
 
 const TodoList = () => {
-    const [ todos, setTodos ] = useState<ITodo[]>([]);
+    const todoList = useSelector((state: Store) => state.todos);
+    const dispatch = useDispatch();
 
     useEffect(() => {
-        async function getTodos() {
-            let response: ITodo[] = await getAllTodos();
-            setTodos(response);
-        }
-
-        getTodos();
-    }, []);
+        dispatch(initialFetch());
+    }, [dispatch]);
 
     return (
         <div>
-            { todos?.map((todo, index) => <Todo { ...todo } key={ index }/>) }
+            {todoList?.map((todo, index) => <Todo {...todo} key={index} />)}
         </div>
     );
 }

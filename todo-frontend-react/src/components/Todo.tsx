@@ -1,5 +1,5 @@
 import React from 'react';
-import { ITodo } from "../interfaces";
+import { ITodo } from "../models";
 
 interface IProps extends ITodo {
     key: number;

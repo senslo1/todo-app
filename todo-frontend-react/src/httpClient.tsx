@@ -1,4 +1,4 @@
-import { ITodo } from "./interfaces";
+import { ITodo } from "./models";
 
 const getTodos = async (url: string): Promise<ITodo[]> => {
     let response = await fetch(url, {
