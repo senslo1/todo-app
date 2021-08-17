@@ -18,6 +18,11 @@ const todoReducer = (
                 todos: [ ...state.todos, action.payload ],
                 newTodo: { text: "", category: "" }
             };
+        case ActionTypes.DELETE:
+            return {
+                ...state,
+                todos: state.todos.filter(todo => todo.id !== action.payload)
+            };
         case ActionTypes.INITIAL_FETCH_SUCCESS:
             return {
                 ...state,

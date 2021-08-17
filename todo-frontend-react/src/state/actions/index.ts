@@ -11,6 +11,11 @@ interface AddAction {
     payload: ITodo
 }
 
+interface DeleteAction {
+    type: ActionTypes.DELETE,
+    payload: number
+}
+
 interface SetTodosAction {
     type: ActionTypes.INITIAL_FETCH_SUCCESS,
     payload: ITodo[]
@@ -21,4 +26,4 @@ interface SetNewTodoAction {
     payload: ITodo
 }
 
-export type Action = InitialFetchAction | AddAction | SetTodosAction | SetNewTodoAction;
+export type Action = InitialFetchAction | AddAction | DeleteAction | SetTodosAction | SetNewTodoAction;

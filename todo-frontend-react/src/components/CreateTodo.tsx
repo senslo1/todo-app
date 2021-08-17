@@ -1,7 +1,10 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Store } from "../state";
-import { addTodo, setNewTodo } from "../state/action-creators";
+import { submitTodo as submitTodoToApi, setNewTodo } from "../state/action-creators";
+import AddIcon from '@material-ui/icons/Add';
+import Fab from '@material-ui/core/Fab';
+import Zoom from '@material-ui/core/Zoom';
 
 const CreateTodo = () => {
     const newTodo = useSelector((state: Store) => state.newTodo);
@@ -19,26 +22,32 @@ const CreateTodo = () => {
 
     function submitTodo(event: any) {
         event.preventDefault();
-        dispatch(addTodo(newTodo));
+        dispatch(submitTodoToApi(newTodo));
     }
 
     return (
-        <form onSubmit={(event) => submitTodo(event)}>
-            <label>What would you like to get done?</label><br />
+        <form className="create-todo" onSubmit={(event) => submitTodo(event)}>
             <input type="text"
                    name="text"
+                   placeholder="What would you like to get done?"
                    value={newTodo.text}
                    onChange={(event) => changeNewTodo(event)}
                    id="todoTextInput"
-            /><br />
-            <label>What is the category?</label><br />
-            <input type="text"
-                   name="category"
-                   value={newTodo.category}
-                   onChange={(event) => changeNewTodo(event)}
-                   id="todoCategoryInput"
-            /><br />
-            <button type="submit">Create todo</button>
+            />
+            <Zoom in={newTodo.text.length > 0}>
+                <input type="text"
+                       name="category"
+                       placeholder="What is the category?"
+                       value={newTodo.category}
+                       onChange={(event) => changeNewTodo(event)}
+                       id="todoCategoryInput"
+                />
+            </Zoom>
+            <Zoom in={newTodo.text.length > 0}>
+                <Fab type="submit">
+                    <AddIcon />
+                </Fab>
+            </Zoom>
         </form>
     );
 };

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect } from 'react';
 import Todo from "./Todo";
 import { useDispatch, useSelector } from "react-redux";
@@ -10,11 +11,11 @@ const TodoList = () => {
 
     useEffect(() => {
         dispatch(initialFetch());
-    }, [dispatch]);
+    }, []);
 
     return (
         <div>
-            {todoList?.map((todo, index) => <Todo {...todo} key={index} />)}
+            {todoList?.map(todo => <Todo {...todo} key={todo.id!} />)}
         </div>
     );
 }
