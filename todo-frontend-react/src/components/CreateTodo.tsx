@@ -2,9 +2,9 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Store } from "../state";
 import { submitTodo as submitTodoToApi, setNewTodo } from "../state/action-creators";
-import AddIcon from '@material-ui/icons/Add';
-import Fab from '@material-ui/core/Fab';
-import Zoom from '@material-ui/core/Zoom';
+import AddIcon from "@material-ui/icons/Add";
+import Fab from "@material-ui/core/Fab";
+import Zoom from "@material-ui/core/Zoom";
 
 const CreateTodo = () => {
     const newTodo = useSelector((state: Store) => state.newTodo);
