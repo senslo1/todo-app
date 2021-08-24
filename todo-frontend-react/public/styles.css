@@ -28,7 +28,7 @@ header h1 {
 }
 
 .todo {
-    background: #f0f0f0 ;
+    background-color: #f0f0f0;
     border-radius: 7px;
     box-shadow: 0 2px 5px #ccc;
     padding: 10px;
@@ -54,7 +54,7 @@ header h1 {
     float: right;
     margin-right: 0px;
     color: #f5ba13;
-    background-color: #ffffff;
+    background-color: #f0f0f0;
     border: none;
     width: 36px;
     height: 36px;
@@ -73,7 +73,7 @@ form.create-todo {
 }
 
 form.create-todo input {
-    background: #f0f0f0;
+    background-color: #f0f0f0;
     width: 100%;
     border: none;
     padding: 4px;
@@ -87,7 +87,7 @@ form.create-todo button {
     position: absolute;
     right: 18px;
     bottom: -18px;
-    background: #f5ba13;
+    background-color: #f5ba13;
     color: #fff;
     border: none;
     border-radius: 50%;
