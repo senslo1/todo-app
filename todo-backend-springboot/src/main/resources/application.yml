@@ -15,6 +15,7 @@ spring:
 swagger:
   specification:
     document-path: @project.basedir@/src/main/resources/swagger.yml
-
+client:
+  origin: http://localhost:3000
 server:
   port: 5000
