@@ -1,4 +1,4 @@
-import React from "react";
+import React, { FormEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Store } from "../state";
 import { submitTodo as submitTodoToApi, setNewTodo } from "../state/action-creators";
@@ -10,7 +10,7 @@ const CreateTodo = () => {
     const newTodo = useSelector((state: Store) => state.newTodo);
     const dispatch = useDispatch();
 
-    function changeNewTodo(event: React.FormEvent<HTMLInputElement>) {
+    function changeNewTodo(event: React.ChangeEvent<HTMLInputElement>) {
         const { value, name } = event.currentTarget;
         dispatch(
             setNewTodo({
@@ -20,7 +20,7 @@ const CreateTodo = () => {
         );
     }
 
-    function submitTodo(event: any) {
+    function submitTodo(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
         dispatch(submitTodoToApi(newTodo));
     }

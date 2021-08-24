@@ -23,20 +23,17 @@ const postTodo = async (data: ITodo): Promise<ITodo> => {
         },
         body: JSON.stringify(data)
     });
-    if (response.ok) {
-        return response.json();
-    } else {
+    if (!response.ok) {
         throw response.status;
     }
+    return response.json();
 };
 
 const deleteTodo = async (id: number) => {
     const response = await fetch(`${url}/${id}`, {
         method: 'DELETE',
     });
-    if (response.ok) {
-        return;
-    } else {
+    if (!response.ok) {
         throw response.status;
     }
 };
